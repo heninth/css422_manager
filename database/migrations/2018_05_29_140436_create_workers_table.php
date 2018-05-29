@@ -15,6 +15,7 @@ class CreateWorkersTable extends Migration
     {
         Schema::create('workers', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('token')->unique();
             $table->enum('status', ['online', 'offline'])->default('online');
             $table->timestamp('update')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamps();
