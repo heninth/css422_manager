@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 use App\Worker;
 
 class ApiController extends Controller
@@ -28,5 +29,29 @@ class ApiController extends Controller
         $worker->save();
 
         return json_encode(['workerToken' => $worker->token]);
+    }
+
+    public function workerOnline(Request $request) {
+        $worker = Worker::where('token', $request->input('workerToken', ''))->first();
+        if ($worker == null) {
+            return json_encode(['success' => false]);
+        }
+
+        $worker->update = Carbon::now();
+        $worker->status = 'online';
+        $worker->save();
+        return json_encode(['success' => true]);
+    }
+
+    public function workerOffline(Request $request) {
+        $worker = Worker::where('token', $request->input('workerToken', ''))->first();
+        if ($worker == null) {
+            return json_encode(['success' => false]);
+        }
+
+        $worker->update = Carbon::now();
+        $worker->status = 'offline';
+        $worker->save();
+        return json_encode(['success' => true]);
     }
 }

@@ -16,3 +16,5 @@ Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
 Route::get('/api/worker/registration', 'ApiController@workerRegistration')->name('api.worker.registration');
+Route::post('/api/worker/online', 'ApiController@workerOnline')->name('api.worker.online');
+Route::post('/api/worker/offline', 'ApiController@workerOffline')->name('api.worker.offline');
