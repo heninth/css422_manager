@@ -15,4 +15,4 @@ Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('home');
 
-Route::get('/api/regisWorker', 'ApiController@regisWorker')->name('api.regisWorker');
+Route::get('/api/worker/registration', 'ApiController@workerRegistration')->name('api.worker.registration');
