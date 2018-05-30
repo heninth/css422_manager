@@ -14,6 +14,7 @@
 Auth::routes();
 
 Route::get('/', 'HomeController@index')->name('job');
+Route::get('/delete/{job_id}', 'HomeController@delete')->name('delete-job');
 Route::get('/result/{job_id}', 'HomeController@show')->name('result-job');
 
 Route::get('/api/worker/registration', 'ApiController@workerRegistration')->name('api.worker.registration');

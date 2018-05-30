@@ -6,5 +6,5 @@
     <td>{{$finished}}</td>
     <td>{{$status}}</td>
     <td><button type="button" class="btn btn-primary" onclick="window.location ='{{route('result-job',['listResult' => $job_id])}}'">View Result</button></td>
-    <td><button type="button" class="btn btn-danger">Delete</button></td>
+    <td><button type="button" class="btn btn-danger" onclick="window.location ='{{route('delete-job',['listResult' => $job_id])}}'">Delete</button></td>
 </tr>
