@@ -47,6 +47,9 @@
                                         @slot('status')
                                             {{$i->status}}
                                         @endslot
+                                        @slot('job_id')
+                                            {{$i->id}}
+                                        @endslot
                                     @endcomponent
                                 @endforeach
                                 </tbody>

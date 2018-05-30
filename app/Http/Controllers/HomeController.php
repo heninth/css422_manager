@@ -28,9 +28,15 @@ class HomeController extends Controller
         $idUser = Auth::user()->id;
         $listJob = Job::where('user_id', $idUser)->get();
         foreach ($listJob as $item){
-            $resultJob[$item->id] = JobResult::where('job_id', $item->id)->get();
             $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
         }
-        return view('job',compact('listJob','resultJob', 'countResultJob'));
+        return view('job',compact('listJob', 'countResultJob'));
+    }
+    public function show($job_id)
+    {
+        $job = Job::where('id', $job_id)->first();
+        $listResult = JobResult::where('job_id', $job_id)->get();
+        $countResult = JobResult::where('job_id', $job_id)->get()->count();
+        return view('result-job', compact('listResult', 'countResult', 'job'));
     }
 }
