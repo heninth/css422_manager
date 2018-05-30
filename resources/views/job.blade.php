@@ -35,6 +35,9 @@
                                         @slot('algorithm')
                                             {{$i->algorithm}}
                                         @endslot
+                                        @slot('crack')
+                                            {{$countResultJob[$i->id]}}
+                                        @endslot
                                         @slot('submit')
                                             {{$i->created_at}}
                                         @endslot
