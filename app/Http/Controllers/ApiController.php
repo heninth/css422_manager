@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
-use App\Worker;
 use App\Job;
 use App\JobResult;
 use App\Task;
+use App\Worker;
 
 class ApiController extends Controller
 {
@@ -118,6 +119,40 @@ class ApiController extends Controller
                       'hashes' => $hashes ,
                       ]);
 
+    }
+
+    public function submitTask(Request $request){
+      $worker = Worker::where('token', $request->input('workerToken', ''))->first();
+      if ($worker == null) {
+          return json_encode(['success' => false]);
+      }
+      
+      $taskId = $request->taskId;
+      $answerBool = $request->answer;
+      $task = Task::where('id',$taskId)->first();
+      $jobid = $task->job_id;
+      $task->status = 'finished';
+      $task->save();
+      if($answerBool == 'true'){
+        $hashes = $request->hashes;
+        $plains = $request->plains;
+        $index = 0;
+        foreach($hashes as $hash){
+          $dbhash = Jobresult::where([ ['job_id',$jobid] , ['hash',$hash] ])->first();
+          $dbhash->plain = $plains[$index];
+          $dbhash->save();
+          $index++;
+        }
+      }
+
+      // check if job finished ?
+      if( (Jobresult::where([ ['job_id',$jobid] , ['plain','' ] ])->get() )->isEmpty() ){
+        $job = Job::where('id',$jobid)->first();
+        $job->status = 'finished';
+        $job->save();
+      }
+
+      return json_encode(['success' => true]);
     }
 
 }

@@ -23,3 +23,4 @@ Route::get('/api/worker/registration', 'ApiController@workerRegistration')->name
 Route::post('/api/worker/online', 'ApiController@workerOnline')->name('api.worker.online');
 Route::post('/api/worker/offline', 'ApiController@workerOffline')->name('api.worker.offline');
 Route::post('/api/getTask', 'ApiController@getTask')->name('api.gettask');
+Route::post('/api/submitTask', 'ApiController@submitTask')->name('api.submitTask');
