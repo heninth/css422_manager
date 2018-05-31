@@ -17,12 +17,12 @@ class ApiController extends Controller
             for ($i = 0; $i < $length; $i++) {
                 $token .= $characters[rand(0, $charactersLength - 1)];
             }
-            
+
             if (Worker::where('token', $token)->first() == null) {
                 break;
             }
         }
-        
+
 
         $worker = new Worker();
         $worker->token = $token;
@@ -53,5 +53,9 @@ class ApiController extends Controller
         $worker->status = 'offline';
         $worker->save();
         return json_encode(['success' => true]);
+    }
+
+    public function getTask(Request $request){
+
     }
 }

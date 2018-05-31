@@ -84,7 +84,7 @@ class HomeController extends Controller
 
         // แตก task ตรงนี้
         for($i = $request->input('min_length') ; $i<= $request->input('max_length') ; $i++ ){
-          $tasknumber = count(Worker::where('status','online')) * 2;
+          $tasknumber = count(Worker::where('status','online')->get()) * 2;
           if($tasknumber == 0 || $tasknumber < 10){
             $tasknumber = 10;
           }
