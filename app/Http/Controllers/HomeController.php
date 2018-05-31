@@ -29,9 +29,9 @@ class HomeController extends Controller
         // อาจจะโชว์เป็น 0/10 ก็ได้เป็น จำนวนที่มี plain text แล้ว / จำนวนทั้งหมด
         // เรียงลำดับต้องเอาตัวใหม่มาก่อนรึเปล่า
         $idUser = Auth::user()->id;
-        $listJob = Job::where('user_id', $idUser)->get();
+        $listJob = Job::where('user_id', $idUser)->orderBy('id', 'desc')->get();
         foreach ($listJob as $item){
-            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
+            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->where('plain', '!=', '')->get()->count();
         }
         return view('job',compact('listJob', 'countResultJob'));
     }
@@ -64,7 +64,10 @@ class HomeController extends Controller
         $array_hash =  explode("\r\n", $request->input('hash'));
         
         // TODO: เช็คตัวซ้ำ
-
+        $duplicate = count(array_unique($array_hash));
+        if (count($array_hash) != $duplicate) {
+            return back()->with('duplicate', 'Please check duplicate value in hash');
+        }
         $hash_length = ($job->algorithm == 'md5') ? 32 : 40;
         for($i = 0; $i < count($array_hash); $i++ ){
             if (strlen($array_hash[$i]) != $hash_length){
@@ -83,12 +86,8 @@ class HomeController extends Controller
         // TODO: แตก task ตรงนี้
 
         //--------------------------------------refresh job page------------------------------------------------//
-        $idUser = Auth::user()->id;
-        $listJob = Job::where('user_id', $idUser)->get();
-        foreach ($listJob as $item){
-            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
-        }
-        return view('job',compact('listJob', 'countResultJob'));
+
+       return redirect()->action('HomeController@index');
     }
 
     public function delete($job_id)
@@ -96,11 +95,6 @@ class HomeController extends Controller
         JobResult::where('job_id', $job_id)->delete();
         Job::where('id', $job_id)->delete();
         //--------------------------------------refresh job page------------------------------------------------//
-        $idUser = Auth::user()->id;
-        $listJob = Job::where('user_id', $idUser)->get();
-        foreach ($listJob as $item){
-            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
-        }
-        return view('job',compact('listJob', 'countResultJob'));
+        return redirect()->action('HomeController@index');
     }
 }

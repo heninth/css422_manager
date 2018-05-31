@@ -20,7 +20,13 @@
                                 </ul>
                             </div>
                         @endif
-
+                        @if (session('duplicate'))
+                            <div class="alert alert-danger">
+                                <ul>
+                                    <li> {!! session()->get('duplicate') !!}</li>
+                                </ul>
+                            </div>
+                        @endif
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
