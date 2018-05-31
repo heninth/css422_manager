@@ -25,6 +25,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // TODO: crack ยังโชว์ผิดอยู่ ต้องโชว์ตัวที่มี plain text แล้ว
+        // อาจจะโชว์เป็น 0/10 ก็ได้เป็น จำนวนที่มี plain text แล้ว / จำนวนทั้งหมด
+        // เรียงลำดับต้องเอาตัวใหม่มาก่อนรึเปล่า
         $idUser = Auth::user()->id;
         $listJob = Job::where('user_id', $idUser)->get();
         foreach ($listJob as $item){
@@ -59,8 +62,12 @@ class HomeController extends Controller
         $job->min_length = $request->input('min_length');
         $job->max_length = $request->input('max_length');
         $array_hash =  explode("\r\n", $request->input('hash'));
+        
+        // TODO: เช็คตัวซ้ำ
+
+        $hash_length = ($job->algorithm == 'md5') ? 32 : 40;
         for($i = 0; $i < count($array_hash); $i++ ){
-            if ($array_hash[$i] < $request->input('min_length') || $array_hash[$i] > $request->input('max_length')){
+            if (strlen($array_hash[$i]) != $hash_length){
                 return back()->with('error', 'Please check length of hash');
             }
         }
@@ -72,6 +79,9 @@ class HomeController extends Controller
             $job_Result->plain = '';
             $job_Result->save();
         }
+
+        // TODO: แตก task ตรงนี้
+
         //--------------------------------------refresh job page------------------------------------------------//
         $idUser = Auth::user()->id;
         $listJob = Job::where('user_id', $idUser)->get();
