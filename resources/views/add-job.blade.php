@@ -42,7 +42,6 @@
                                         <option value="sha1">Sha1</option>
                                     </select>
                                 </div>
-                                <div class="col-sm"></div>
                             </div>
 
                             <div class="row">
@@ -77,14 +76,12 @@
                                 <div class="col-sm-8 input-group mb-3">
                                     <textarea class="form-control" name="hash" rows="3"></textarea>
                                 </div>
-                                <div class="col-sm"></div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-8">
                                     <button type="submit" class="btn btn-success" style="width: 100px">Submit</button>
                                 </div>
-                                <div class="col-sm"></div>
                             </div>
                         </form>
                     </div>
