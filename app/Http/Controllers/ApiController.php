@@ -58,7 +58,12 @@ class ApiController extends Controller
         return json_encode(['success' => true]);
     }
 
-    public function getTask(){
+    public function getTask(Request $request){
+      $worker = Worker::where('token', $request->input('workerToken', ''))->first();
+      if ($worker == null) {
+          return json_encode(['success' => false]);
+      }
+
       $jobs = Job::where('status','running')->get(); // look in the job that running
       $newTask = false;
       foreach ($jobs as $job) {
