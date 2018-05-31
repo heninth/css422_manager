@@ -17,6 +17,7 @@ Route::get('/', 'HomeController@index')->name('job');
 Route::get('/addJob', 'HomeController@add')->name('add-job');
 Route::get('/delete/{job_id}', 'HomeController@delete')->name('delete-job');
 Route::get('/result/{job_id}', 'HomeController@show')->name('result-job');
+Route::post('/save', 'HomeController@save')->name('save-job');
 
 Route::get('/api/worker/registration', 'ApiController@workerRegistration')->name('api.worker.registration');
 Route::post('/api/worker/online', 'ApiController@workerOnline')->name('api.worker.online');

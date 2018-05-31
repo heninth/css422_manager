@@ -43,6 +43,29 @@ class HomeController extends Controller
     {
         return view('add-job');
     }
+    public function save(Request $request)
+    {
+        $job = new Job();
+        $job->user_id = Auth::user()->id;
+        $job->algorithm = $request->input('algorithm');
+        $job->min_length = $request->input('min_length');
+        $job->max_length = $request->input('max_length');
+        $job->save();
+        $array_hash =  explode("\r\n", $request->input('hash'));
+        for($i = 0; $i < count($array_hash); $i++){
+            $job_Result = new JobResult();
+            $job_Result->job_id = Job::all()->last()->id;
+            $job_Result->hash = $array_hash[$i];
+            $job_Result->plain = '';
+            $job_Result->save();
+        }
+        $idUser = Auth::user()->id;
+        $listJob = Job::where('user_id', $idUser)->get();
+        foreach ($listJob as $item){
+            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
+        }
+        return view('job',compact('listJob', 'countResultJob'));
+    }
     public function delete($job_id)
     {
 
