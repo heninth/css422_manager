@@ -39,6 +39,10 @@ class HomeController extends Controller
         $countResult = JobResult::where('job_id', $job_id)->get()->count();
         return view('result-job', compact('listResult', 'countResult', 'job'));
     }
+    public function add()
+    {
+        return view('add-job');
+    }
     public function delete($job_id)
     {
 
