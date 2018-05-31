@@ -9,7 +9,7 @@
                         <button type="button" class="btn btn-success" onclick="window.location ='{{route('add-job')}}'">New Job +</button>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body table-responsive">
                         @if (session('status'))
                             <div class="alert alert-success">
                                 {{ session('status') }}
