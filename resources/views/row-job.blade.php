@@ -1,5 +1,5 @@
 <tr>
-    <th scope="row">1</th>
+    <th scope="row">{{$job_id}}</th>
     <td>{{$algorithm}}</td>
     <td>{{$crack}}</td>
     <td>{{$submit}}</td>

@@ -39,10 +39,12 @@ class HomeController extends Controller
         $countResult = JobResult::where('job_id', $job_id)->get()->count();
         return view('result-job', compact('listResult', 'countResult', 'job'));
     }
+
     public function add()
     {
         return view('add-job');
     }
+
     public function save(Request $request)
     {
         $job = new Job();
@@ -59,6 +61,8 @@ class HomeController extends Controller
             $job_Result->plain = '';
             $job_Result->save();
         }
+
+        //--------------------------------------refresh job page------------------------------------------------//
         $idUser = Auth::user()->id;
         $listJob = Job::where('user_id', $idUser)->get();
         foreach ($listJob as $item){
@@ -66,8 +70,18 @@ class HomeController extends Controller
         }
         return view('job',compact('listJob', 'countResultJob'));
     }
+
     public function delete($job_id)
     {
+        JobResult::where('job_id', $job_id)->delete();
+        Job::where('id', $job_id)->delete();
 
+        //--------------------------------------refresh job page------------------------------------------------//
+        $idUser = Auth::user()->id;
+        $listJob = Job::where('user_id', $idUser)->get();
+        foreach ($listJob as $item){
+            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->get()->count();
+        }
+        return view('job',compact('listJob', 'countResultJob'));
     }
 }
