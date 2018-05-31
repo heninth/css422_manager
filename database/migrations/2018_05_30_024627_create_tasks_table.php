@@ -19,6 +19,7 @@ class CreateTasksTable extends Migration
             $table->unsignedInteger('worker_id')->nullable();
             $table->string('start_hash');
             $table->string('end_hash');
+            $table->unsignedInteger('range');
             $table->timestamp('timeout_at');
             $table->enum('status', ['finished', 'running', 'queue'])->default('queue');
             $table->timestamps();

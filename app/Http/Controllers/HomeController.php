@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Job;
 use App\JobResult;
+use App\Task;
+use App\Worker;
 class HomeController extends Controller
 {
     /**
@@ -62,7 +64,7 @@ class HomeController extends Controller
         $job->min_length = $request->input('min_length');
         $job->max_length = $request->input('max_length');
         $array_hash =  explode("\r\n", $request->input('hash'));
-        
+
         // TODO: เช็คตัวซ้ำ
 
         $hash_length = ($job->algorithm == 'md5') ? 32 : 40;
@@ -80,7 +82,29 @@ class HomeController extends Controller
             $job_Result->save();
         }
 
-        // TODO: แตก task ตรงนี้
+        // แตก task ตรงนี้
+        for($i = $request->input('min_length') ; $i<= $request->input('max_length') ; $i++ ){
+          $tasknumber = count(Worker::where('status','online')) * 2;
+          if($tasknumber == 0 || $tasknumber < 10){
+            $tasknumber = 10;
+          }
+          $testcase = floor(pow(62,$i) / $tasknumber);
+          for($y = 1 ; $y <= $tasknumber ; $y++){
+            $task = new Task();
+            $task->job_id = Job::all()->last()->id;
+            $task->range = $i;
+            $task->start_hash = ($y-1) * $testcase;
+            if($y != $tasknumber){
+              $task->end_hash = ($y * $testcase) - 1 ;
+            }
+            else{
+              $task->end_hash = pow(62,$i) - 1;
+            }
+            $task->save();
+          }
+        }
+
+
 
         //--------------------------------------refresh job page------------------------------------------------//
         $idUser = Auth::user()->id;
