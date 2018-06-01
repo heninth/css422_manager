@@ -59,14 +59,13 @@ class ApiController extends Controller
         return json_encode(['success' => true]);
     }
 
-    public function getTask(Request $request){
-      $worker = Worker::where('token', $request->input('workerToken', ''))->first();
-      if ($worker == null) {
-          return json_encode(['success' => false]);
-      }
+    public function getTask(){
 
       $jobs = Job::where('status','running')->get(); // look in the job that running
       $newTask = false;
+      if($jobs->isEmpty()){
+          return json_encode(['newTask' => $newTask]);
+      }
       foreach ($jobs as $job) {
         $flag = 0; //check if we got task in sub loop already ?
         $tasks = Task::where([['status','!=','finished'],['job_id',$job->id]])->get();
@@ -126,7 +125,7 @@ class ApiController extends Controller
       if ($worker == null) {
           return json_encode(['success' => false]);
       }
-      
+
       $taskId = $request->taskId;
       $answerBool = $request->answer;
       $task = Task::where('id',$taskId)->first();
