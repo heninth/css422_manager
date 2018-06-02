@@ -34,9 +34,11 @@ class HomeController extends Controller
         $idUser = Auth::user()->id;
         $listJob = Job::where('user_id', $idUser)->orderBy('id', 'desc')->get();
         foreach ($listJob as $item){
-            $countResultJob[$item->id] = JobResult::where('job_id', $item->id)->where('plain', '!=', '')->get()->count();
+            $r = JobResult::where('job_id', $item->id)->get();
+            $countCrackHash[$item->id] = $r->where('plain', '!=', '')->count();
+            $countUnCrackHash[$item->id] = $r->count();
         }
-        return view('job',compact('listJob', 'countResultJob'));
+        return view('job',compact('listJob', 'countCrackHash', 'countUnCrackHash'));
     }
     public function show($job_id)
     {
@@ -118,6 +120,7 @@ class HomeController extends Controller
     public function delete($job_id)
     {
         JobResult::where('job_id', $job_id)->delete();
+        Task::where('job_id', $job_id)->delete();
         Job::where('id', $job_id)->delete();
         //--------------------------------------refresh job page------------------------------------------------//
         return redirect()->action('HomeController@index');
