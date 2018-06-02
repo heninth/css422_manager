@@ -16,22 +16,22 @@
 
                             <div class="row mb-2">
                                 <div class="col-sm-2">Job ID </div>
-                                <div class="col-sm-4">: {{$job->id}}</div>
+                                <div class="col-sm-4">: {{ $job->id }}</div>
                                 <div class="col-sm-2">Status</div>
                                 <div class="col-sm-4">: {{ ucfirst($job->status) }}</div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-sm-2">Algorithm </div>
-                                <div class="col-sm-4">: {{$job->algorithm}}</div>
+                                <div class="col-sm-4">: {{ $job->algorithm }}</div>
                                 <div class="col-sm-2">Hash count </div>
-                                <div class="col-sm-4">: {{$countResult}}</div>
+                                <div class="col-sm-4">: {{ $countResult }}</div>
                             </div>
                             <div class="row mb-2">
                                 <div class="col-sm-2">Submit At </div>
-                                <div class="col-sm-4">: {{$job->created_at}}</div>
+                                <div class="col-sm-4">: {{ $job->created_at }}</div>
                                 @if($job->status == 'finished')
                                 <div class="col-sm-2">Finished At </div>
-                                <div class="col-sm-4">: {{$job->update_at}}</div>
+                                <div class="col-sm-4">: {{ $job->updated_at }}</div>
                                 @endif
                             </div>
 
