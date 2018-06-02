@@ -29,19 +29,21 @@ class ApiController extends Controller
 
 
         $worker = new Worker();
+        $worker->update = Carbon::now('Asia/Bangkok');
         $worker->token = $token;
         $worker->save();
 
         return json_encode(['workerToken' => $worker->token]);
     }
 
+    /*
     public function workerOnline(Request $request) {
         $worker = Worker::where('token', $request->input('workerToken', ''))->first();
         if ($worker == null) {
             return json_encode(['success' => false]);
         }
 
-        $worker->update = Carbon::now();
+        $worker->update = Carbon::now('Asia/Bangkok');
         $worker->status = 'online';
         $worker->save();
         return json_encode(['success' => true]);
@@ -53,17 +55,24 @@ class ApiController extends Controller
             return json_encode(['success' => false]);
         }
 
-        $worker->update = Carbon::now();
+        $worker->update = Carbon::now('Asia/Bangkok');
         $worker->status = 'offline';
         $worker->save();
         return json_encode(['success' => true]);
     }
+    */
 
     public function getTask(Request $request){
+       
       $worker = Worker::where('token', $request->input('workerToken', ''))->first();
       if ($worker == null) {
           return json_encode(['success' => false]);
       }
+      //update worker time
+      $worker->update_active();
+
+      //delete inactive worker
+      Worker::delete_inactive();
 
       $jobs = Job::where('status','running')->get(); // look in the job that running
       $newTask = false;
@@ -129,6 +138,8 @@ class ApiController extends Controller
       if ($worker == null) {
           return json_encode(['success' => false]);
       }
+      //update worker time
+      $worker->update_active();
 
       $taskId = $request->taskId;
       $answerBool = $request->answer;
@@ -153,8 +164,6 @@ class ApiController extends Controller
           $job->save();
         }
       }
-
-
 
       return json_encode(['success' => true]);
     }
