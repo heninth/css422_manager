@@ -15,6 +15,6 @@ class Worker extends Model
     }
 
     public static function delete_inactive() {
-        Worker::whereDate('update', '<', Carbon::now('Asia/Bangkok')->subMinutes(15))->delete();
+        Worker::where('update', '<', Carbon::now('Asia/Bangkok')->subMinutes(15))->delete();
     }
 }
