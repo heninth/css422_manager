@@ -59,7 +59,11 @@ class ApiController extends Controller
         return json_encode(['success' => true]);
     }
 
-    public function getTask(){
+    public function getTask(Request $request){
+      $worker = Worker::where('token', $request->input('workerToken', ''))->first();
+      if ($worker == null) {
+          return json_encode(['success' => false]);
+      }
 
       $jobs = Job::where('status','running')->get(); // look in the job that running
       $newTask = false;
@@ -78,10 +82,10 @@ class ApiController extends Controller
                 $start = $task->start_hash;
                 $end = $task->end_hash;
                 $range = $task->range;
-                $timeout = 120;
+                $timeout = 300;
                 $hashes = JobResult::select('hash')->where('job_id',$job->id)->get();
                 $flag = 1;
-                $task->timeout_at = Carbon::now('Asia/Bangkok')->addMinutes(2);
+                $task->timeout_at = Carbon::now('Asia/Bangkok')->addMinutes(5);
                 $task->save();
                 break;
               }
@@ -93,10 +97,10 @@ class ApiController extends Controller
               $start = $task->start_hash;
               $end = $task->end_hash;
               $range = $task->range;
-              $timeout = 120;
+              $timeout = 300;
               $hashes = JobResult::select('hash')->where('job_id',$job->id)->get();
               $flag = 1;
-              $task->timeout_at = Carbon::now('Asia/Bangkok')->addMinutes(2);
+              $task->timeout_at = Carbon::now('Asia/Bangkok')->addMinutes(5);
               $task->status = 'running';
               $task->save();
               break;
@@ -142,14 +146,15 @@ class ApiController extends Controller
           $dbhash->save();
           $index++;
         }
+        // check if job finished ?
+        if( (Jobresult::where([ ['job_id',$jobid] , ['plain','' ] ])->get() )->isEmpty() ){
+          $job = Job::where('id',$jobid)->first();
+          $job->status = 'finished';
+          $job->save();
+        }
       }
 
-      // check if job finished ?
-      if( (Jobresult::where([ ['job_id',$jobid] , ['plain','' ] ])->get() )->isEmpty() ){
-        $job = Job::where('id',$jobid)->first();
-        $job->status = 'finished';
-        $job->save();
-      }
+
 
       return json_encode(['success' => true]);
     }
