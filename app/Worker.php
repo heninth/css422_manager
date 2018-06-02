@@ -9,9 +9,9 @@ class Worker extends Model
 {
     public function update_active() {
         //update worker time
-        $worker->update = Carbon::now('Asia/Bangkok');
-        $worker->status = 'online';
-        $worker->save();
+        $this->update = Carbon::now('Asia/Bangkok');
+        $this->status = 'online';
+        $this->save();
     }
 
     public static function delete_inactive() {
